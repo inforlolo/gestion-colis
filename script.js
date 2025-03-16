@@ -1,139 +1,84 @@
-let colisData = [];
+document.addEventListener("DOMContentLoaded", loadColis);
 
-// Charger les colis depuis le localStorage au démarrage
-window.onload = function() {
-    loadColis();
-};
+function openAddModal() {
+    document.getElementById("colisForm").reset();
+    document.getElementById("modalTitle").innerText = "Ajouter un Colis";
+    document.getElementById("editIndex").value = "";
+    document.getElementById("modal").style.display = "flex";
+}
 
-document.getElementById('addForm').addEventListener('submit', function(event) {
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
+
+document.getElementById("colisForm").addEventListener("submit", function(event) {
     event.preventDefault();
-    if (editingId !== null) {
-        updateColis(editingId);
+
+    let index = document.getElementById("editIndex").value;
+    let nom = document.getElementById("nom").value;
+    let numeroSuivi = document.getElementById("numeroSuivi").value;
+    let statut = document.getElementById("statut").value;
+    let date = document.getElementById("date").value;
+
+    let colis = { nom, numeroSuivi, statut, date };
+    let colisList = JSON.parse(localStorage.getItem("colisList")) || [];
+
+    if (index) {
+        colisList[index] = colis; // Modification
     } else {
-        addColis();
+        colisList.push(colis); // Ajout
     }
+
+    localStorage.setItem("colisList", JSON.stringify(colisList));
+    loadColis();
+    closeModal();
 });
 
 function loadColis() {
-    const storedColis = localStorage.getItem('colisData');
-    if (storedColis) {
-        colisData = JSON.parse(storedColis);
-        updateTable();
-    }
-}
+    let colisList = JSON.parse(localStorage.getItem("colisList")) || [];
+    let tableBody = document.getElementById("colisList");
+    tableBody.innerHTML = "";
 
-function saveColis() {
-    localStorage.setItem('colisData', JSON.stringify(colisData));
-}
-
-function addColis() {
-    const nom = document.getElementById('nom').value;
-    const numeroSuivi = document.getElementById('numeroSuivi').value;
-    const statut = document.getElementById('statut').value;
-    const date = document.getElementById('date').value;
-
-    const colis = {
-        id: colisData.length + 1,
-        nom,
-        numeroSuivi,
-        statut,
-        date
-    };
-
-    colisData.push(colis);
-    updateTable();
-    saveColis();
-    closeAddModal();
-}
-
-function updateTable() {
-    const tableBody = document.querySelector('#colisTable tbody');
-    tableBody.innerHTML = '';
-
-    colisData.forEach(colis => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${colis.id}</td>
+    colisList.forEach((colis, index) => {
+        let row = `<tr>
             <td>${colis.nom}</td>
+            <td>${colis.numeroSuivi}</td>
             <td>${colis.statut}</td>
             <td>${colis.date}</td>
-            <td>${colis.numeroSuivi}</td>
-            <td><button onclick="editColis(${colis.id})">Modifier</button></td>
-            <td><button onclick="deleteColis(${colis.id})">Supprimer</button></td>
-        `;
-        tableBody.appendChild(row);
+            <td>
+                <button onclick="editColis(${index})">✏ Modifier</button>
+                <button onclick="deleteColis(${index})">🗑 Supprimer</button>
+            </td>
+        </tr>`;
+        tableBody.innerHTML += row;
     });
 }
 
-let editingId = null;
+function editColis(index) {
+    let colisList = JSON.parse(localStorage.getItem("colisList"));
+    let colis = colisList[index];
 
-function openAddModal() {
-    document.getElementById('addModal').style.display = 'flex';
-    document.getElementById('addForm').reset();
-    document.getElementById('modalTitle').textContent = "Ajouter un Colis";
-    editingId = null;
+    document.getElementById("nom").value = colis.nom;
+    document.getElementById("numeroSuivi").value = colis.numeroSuivi;
+    document.getElementById("statut").value = colis.statut;
+    document.getElementById("date").value = colis.date;
+    document.getElementById("editIndex").value = index;
+
+    document.getElementById("modalTitle").innerText = "Modifier un Colis";
+    document.getElementById("modal").style.display = "flex";
 }
 
-function closeAddModal() {
-    document.getElementById('addModal').style.display = 'none';
+function deleteColis(index) {
+    let colisList = JSON.parse(localStorage.getItem("colisList"));
+    colisList.splice(index, 1);
+    localStorage.setItem("colisList", JSON.stringify(colisList));
+    loadColis();
 }
 
 function searchColis() {
-    const query = document.getElementById('searchBar').value.toLowerCase();
-    const filteredData = colisData.filter(colis => 
-        colis.nom.toLowerCase().includes(query) || colis.numeroSuivi.includes(query)
-    );
-    
-    const tableBody = document.querySelector('#colisTable tbody');
-    tableBody.innerHTML = '';
-
-    filteredData.forEach(colis => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${colis.id}</td>
-            <td>${colis.nom}</td>
-            <td>${colis.statut}</td>
-            <td>${colis.date}</td>
-            <td>${colis.numeroSuivi}</td>
-            <td><button onclick="editColis(${colis.id})">Modifier</button></td>
-            <td><button onclick="deleteColis(${colis.id})">Supprimer</button></td>
-        `;
-        tableBody.appendChild(row);
+    let filter = document.getElementById("search").value.toLowerCase();
+    let rows = document.querySelectorAll("#colisList tr");
+    rows.forEach(row => {
+        row.style.display = row.innerText.toLowerCase().includes(filter) ? "" : "none";
     });
 }
-
-function deleteColis(id) {
-    colisData = colisData.filter(colis => colis.id !== id);
-    updateTable();
-    saveColis();
-}
-
-function editColis(id) {
-    const colis = colisData.find(colis => colis.id === id);
-
-    document.getElementById('nom').value = colis.nom;
-    document.getElementById('numeroSuivi').value = colis.numeroSuivi;
-    document.getElementById('statut').value = colis.statut;
-    document.getElementById('date').value = colis.date;
-    
-    document.getElementById('modalTitle').textContent = "Modifier un Colis";
-    editingId = id;
-    openAddModal();
-}
-
-function updateColis(id) {
-    const index = colisData.findIndex(colis => colis.id === id);
-    
-    colisData[index] = {
-        id,
-        nom: document.getElementById('nom').value,
-        numeroSuivi: document.getElementById('numeroSuivi').value,
-        statut: document.getElementById('statut').value,
-        date: document.getElementById('date').value
-    };
-
-    updateTable();
-    saveColis();
-    closeAddModal();
-}
-
