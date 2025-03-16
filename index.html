@@ -3,50 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion des Colis</title>
+    <title>Gestion de Colis</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Gestion des Colis</h1>
 
-    <input type="text" id="searchBar" onkeyup="searchColis()" placeholder="Rechercher un colis...">
-    
-    <button onclick="openAddModal()">Ajouter un Colis</button>
+    <h1>📦 Gestion des Colis</h1>
 
-    <table id="colisTable">
+    <!-- Bouton pour ouvrir la fenêtre d'ajout -->
+    <button onclick="openAddModal()">➕ Ajouter un Colis</button>
+
+    <!-- Barre de recherche -->
+    <input type="text" id="search" placeholder="🔍 Rechercher un colis..." onkeyup="searchColis()">
+
+    <!-- Tableau des colis -->
+    <table>
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Nom</th>
+                <th>Numéro de Suivi</th>
                 <th>Statut</th>
                 <th>Date</th>
-                <th>Numéro de Suivi</th>
-                <th>Modifier</th>
-                <th>Supprimer</th>
+                <th>Actions</th>
             </tr>
         </thead>
-        <tbody></tbody>
+        <tbody id="colisList"></tbody>
     </table>
 
-    <!-- Modal d'ajout/modification -->
-    <div id="addModal" class="modal">
+    <!-- Fenêtre modale d'ajout / modification -->
+    <div id="modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeAddModal()">&times;</span>
+            <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle">Ajouter un Colis</h2>
-            <form id="addForm">
-                <label>Nom :</label>
-                <input type="text" id="nom" required>
+            <form id="colisForm">
+                <input type="hidden" id="editIndex">
                 
-                <label>Numéro de suivi :</label>
-                <input type="text" id="numeroSuivi" required>
-                
-                <label>Statut :</label>
-                <input type="text" id="statut" required>
-                
-                <label>Date :</label>
+                <label for="nom">📦 Nom du colis :</label>
+                <input type="text" id="nom" placeholder="Ex: Colis Amazon" required>
+
+                <label for="numeroSuivi">🔢 Numéro de suivi :</label>
+                <input type="text" id="numeroSuivi" placeholder="Ex: 123456789" required>
+
+                <label for="statut">📍 Statut :</label>
+                <input type="text" id="statut" placeholder="Ex: En transit" required>
+
+                <label for="date">📅 Date d'ajout :</label>
                 <input type="date" id="date" required>
-                
-                <button type="submit">Ajouter</button>
+
+                <button type="submit">✅ Enregistrer</button>
             </form>
         </div>
     </div>
