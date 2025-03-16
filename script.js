@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", loadColis);
 
-const username = 'TON_NOM'; // Remplace par ton nom GitHub
+const username = 'inforlolo'; // Remplace par ton nom GitHub
 const repo = 'gestion-colis'; // Nom de ton dépôt
 const filePath = 'colis.json'; // Chemin du fichier dans ton dépôt
-const token = 'TON_TOKEN'; // Remplace par ton token d'accès GitHub
+const token = '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'; // Remplace par ton token d'accès GitHub
 
 function openAddModal() {
     document.getElementById("colisForm").reset();
