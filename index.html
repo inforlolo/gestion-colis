@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Colis</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Gestion des Colis</h1>
+
+    <input type="text" id="searchBar" onkeyup="searchColis()" placeholder="Rechercher un colis...">
+    
+    <button onclick="openAddModal()">Ajouter un Colis</button>
+
+    <table id="colisTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Statut</th>
+                <th>Date</th>
+                <th>Numéro de Suivi</th>
+                <th>Modifier</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <!-- Modal d'ajout/modification -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAddModal()">&times;</span>
+            <h2 id="modalTitle">Ajouter un Colis</h2>
+            <form id="addForm">
+                <label>Nom :</label>
+                <input type="text" id="nom" required>
+                
+                <label>Numéro de suivi :</label>
+                <input type="text" id="numeroSuivi" required>
+                
+                <label>Statut :</label>
+                <input type="text" id="statut" required>
+                
+                <label>Date :</label>
+                <input type="date" id="date" required>
+                
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
