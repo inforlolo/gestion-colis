@@ -3,57 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Colis</title>
+    <title>Gestion des Colis</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <h1>📦 Gestion des Colis</h1>
-
-    <!-- Bouton pour ouvrir la fenêtre d'ajout -->
-    <button onclick="openAddModal()">➕ Ajouter un Colis</button>
+    <h1>Gestion des Colis</h1>
 
     <!-- Barre de recherche -->
-    <input type="text" id="search" placeholder="🔍 Rechercher un colis..." onkeyup="searchColis()">
+    <input type="text" id="search" placeholder="Rechercher un colis..." onkeyup="searchColis()">
 
     <!-- Tableau des colis -->
-    <table>
+    <table id="colisTable">
         <thead>
             <tr>
                 <th>Nom</th>
-                <th>Numéro de Suivi</th>
+                <th>Numéro de suivi</th>
                 <th>Statut</th>
                 <th>Date</th>
                 <th>Actions</th>
             </tr>
         </thead>
-        <tbody id="colisList"></tbody>
+        <tbody id="colisList">
+            <!-- Les colis seront insérés ici par JavaScript -->
+        </tbody>
     </table>
 
-    <!-- Fenêtre modale d'ajout / modification -->
-    <div id="modal" class="modal">
+    <!-- Modal pour ajouter ou modifier un colis -->
+    <div id="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
             <h2 id="modalTitle">Ajouter un Colis</h2>
             <form id="colisForm">
                 <input type="hidden" id="editIndex">
-                
-                <label for="nom">📦 Nom du colis :</label>
-                <input type="text" id="nom" placeholder="Ex: Colis Amazon" required>
+                <label for="nom">Nom:</label>
+                <input type="text" id="nom" required><br>
 
-                <label for="numeroSuivi">🔢 Numéro de suivi :</label>
-                <input type="text" id="numeroSuivi" placeholder="Ex: 123456789" required>
+                <label for="numeroSuivi">Numéro de suivi:</label>
+                <input type="text" id="numeroSuivi" required><br>
 
-                <label for="statut">📍 Statut :</label>
-                <input type="text" id="statut" placeholder="Ex: En transit" required>
+                <label for="statut">Statut:</label>
+                <input type="text" id="statut" required><br>
 
-                <label for="date">📅 Date d'ajout :</label>
-                <input type="date" id="date" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" required><br>
 
-                <button type="submit">✅ Enregistrer</button>
+                <button type="submit">Enregistrer</button>
+                <button type="button" onclick="closeModal()">Annuler</button>
             </form>
         </div>
     </div>
+
+    <button onclick="openAddModal()">Ajouter un Colis</button>
 
     <script src="script.js"></script>
 </body>
